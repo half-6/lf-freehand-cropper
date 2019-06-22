@@ -99,10 +99,20 @@ function init(canvasId) {
         if (FileReader && files && files.length) {
             var fr = new FileReader();
             fr.onload = function () {
-                // var a = new Image();
-                // a.src = fr.result;
-                // raster.image = a;
-                raster.source  =fr.result;
+                var image = new Image();
+                image.src = fr.result;
+                image.onload = function() {
+                    raster.source  =fr.result;
+                    if(image.width > view.size.width)
+                    {
+                        raster.fitBounds(view.bounds, true)
+                    }
+                    else
+                    {
+                        raster.scaling = 1;
+
+                    }
+                };
             }
             fr.readAsDataURL(files[0]);
         }
