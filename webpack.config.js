@@ -10,14 +10,14 @@ module.exports = {
     entry: './src/index.js',
     output: {
         filename: 'js/bundle.js',
-        path: resolve('dist'),
+        path: resolve('docs'),
         publicPath: '/'
     },
     plugins: [
         // new CleanWebpackPlugin(['dist/*']) for < v2 versions of CleanWebpackPlugin
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
-            filename: resolve('dist/index.html'),
+            filename: resolve('docs/index.html'),
             template: resolve('public/index.html'),
             favicon:  resolve('public/favicon.ico'),
             inject: true,

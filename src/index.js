@@ -12,7 +12,8 @@ function init(canvasId) {
     let myMove = new move(tool);
     myMove.start();
 
-    var raster = new Raster();
+    var imageElement = document.getElementById('imgOriginal');
+    var raster = new Raster(imageElement);
     raster.position = view.center;
     loadImage();
 
@@ -30,7 +31,7 @@ function init(canvasId) {
     function getPos(){
         var testContainer = $("#test");
         testContainer.html("");
-        testContainer.append('<img src="http://s6.sinaimg.cn/middle/5e95d7f2xb4d3a6caab75&690"/>');
+        testContainer.append(`<img src="${raster.source}"/>`);
 
         var output = [];
         var x = raster.bounds.x;
@@ -56,7 +57,8 @@ function init(canvasId) {
         return output;
     }
     function loadImage(){
-        raster.source  = "http://s6.sinaimg.cn/middle/5e95d7f2xb4d3a6caab75&690";
+        //var imageElement = document.getElementById('imgOriginal');
+        //raster.source  = imageElement //http://s6.sinaimg.cn/middle/5e95d7f2xb4d3a6caab75&690";
         // var newImg = new Image();
         // //newImg.setAttribute('crossOrigin', 'anonymous');
         // newImg.onload = function() {
@@ -87,6 +89,22 @@ function init(canvasId) {
             if(item instanceof Path) {
                 item.remove();
             }
+        }
+    }
+
+
+    document.getElementById('fileImage').onchange = function (evt) {
+        var tgt = evt.target || window.event.srcElement,
+            files = tgt.files;
+        if (FileReader && files && files.length) {
+            var fr = new FileReader();
+            fr.onload = function () {
+                // var a = new Image();
+                // a.src = fr.result;
+                // raster.image = a;
+                raster.source  =fr.result;
+            }
+            fr.readAsDataURL(files[0]);
         }
     }
 }
