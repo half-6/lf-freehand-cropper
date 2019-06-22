@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Freehand Image Cropper</title>
+    <script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+  </head>
+  <style>
+    canvas{
+      border: 1px solid red;
+      width:100%;
+      height: 100%;
+    }
+    canvas[resize] {
+      width: 100%;
+      height: 100%;
+    }
+    #container{
+      background-repeat: no-repeat;
+      background-position: center;
+      width: 100%;
+      height: 400px;
+      margin: auto;
+    }
+    #control-list{
+      width: 640px;
+      margin: auto;
+    }
+    textarea{
+      width: 100%;
+      height: 300px;
+      margin-top: 20px;
+    }
+    #test{
+      position: relative;
+      margin: auto;
+    }
+    #test div{
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 100%;
+      border: 1px solid red;
+      background-color: red;
+    }
+  </style>
+  <body>
+    <div id="container">
+      <canvas id="canvas" resize></canvas>
+    </div>
+    <ul>
+      <li>click pen to draw</li>
+      <li>Ctrl click on stroke to add a point</li>
+      <li>Shift click on point to remove a point</li>
+      <li>Click and drag to move selected object (background,sharp and point)</li>
+      <li>Click and mouse wheel to zoom in/out selected object</li>
+      <li>Click Pos to get all positions</li>
+      <li>Click Reset to clear</li>
+    </ul>
+    <div id="control-list">
+      <button id="btnReset">Reset</button>
+      <button id="btnPen">Pen</button>
+      <button id="btnGetPos">Pos</button>
+      <textarea id="pos"></textarea>
+    </div>
+    <div id="test">
+    </div>
+  </body>
+</html>
