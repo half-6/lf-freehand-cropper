@@ -6,7 +6,7 @@ function move(parent){
         segments: true,
         stroke: true,
         fill: true,
-        tolerance: 5
+        tolerance: 10
     };
 
     function scaleOffset(obj,offset){

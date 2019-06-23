@@ -23,7 +23,7 @@
       background-repeat: no-repeat;
       background-position: center;
       width: 100%;
-      height: 400px;
+      height: 500px;
       margin: auto;
     }
     #control-list{
@@ -32,7 +32,7 @@
     }
     textarea{
       width: 100%;
-      height: 300px;
+      height: 200px;
       margin-top: 20px;
     }
     #test{
@@ -49,6 +49,7 @@
     }
   </style>
   <body>
+    <h1 class="text-center">Free hand image cropper tool</h1>
     <div id="container">
       <canvas id="canvas" resize></canvas>
     </div>
@@ -58,14 +59,14 @@
       <li>Shift + click on point to remove a point</li>
       <li>Click and drag to move selected object (background,sharp and point)</li>
       <li>Click and mouse wheel to zoom in/out selected object</li>
-      <li>Click Pos to get all positions</li>
-      <li>Click Reset to clear</li>
+      <li>Click Pos to get all positions and cropped images</li>
+      <li>Click Reset to clear all path</li>
     </ul>
     <div id="control-list">
-      <button id="btnReset">Reset</button>
-      <button id="btnPen">Pen</button>
-      <button id="btnGetPos">Pos</button>
-      <input type="file" id="fileImage"/>
+      <button class="btn btn-danger" id="btnReset">Reset</button>
+      <button class="btn btn-primary" id="btnPen">Pen</button>
+      <button class="btn btn-primary" id="btnGetPos">Pos</button>
+      <input class="btn btn-light" type="file" id="fileImage"/>
       <textarea id="pos"></textarea>
     </div>
     <div id="test">
