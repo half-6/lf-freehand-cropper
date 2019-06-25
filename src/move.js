@@ -73,6 +73,7 @@ function move(parent){
         }else{
             delta = -1 * event.deltaY;
         }
+        event.preventDefault(); // Limit wheel speed to prevent zoom too fast (#21)
         if (delta < 0){
             //console.log("DOWN");
             if(selectedElement && selectedElement.selected)
