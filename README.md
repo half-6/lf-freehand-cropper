@@ -20,3 +20,6 @@ cropper.crop(imgPos);  //get croppered image by passing image position, which gi
 npm run release //generate cropper.min.js
 npm run start   //start local demo
 ```
+
+### Freehand image cropper release package
+download [here](lib/lf-cropper.min.js)
