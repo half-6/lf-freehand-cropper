@@ -3,15 +3,20 @@ Freehand image cropper built with HTML5 canvas
 
 ## Project setup
 ```
-npm install
+npm install @linkfuture/cropper
+import Cropper from './cropper'
+let cropper = new Cropper("canvas"); //canvas id or canvas object
+cropper.setImage("<backgaround image source>");//backgaround image source, url or base64 image string
+cropper.getImage(); //get image source
+cropper.startPen(); //start crop by using pen 
+cropper.getPos();   //get position list of cropper 
+cropper.clear();    //clear all drawing, but for the image
+cropper.crop(imgPos);  //get croppered image by passing image position, which given by cropper.getPos()
+
 ```
 
 ### Compiles and minifies for production
 ```
-npm run build
-```
-
-### Run your tests
-```
-npm start
+npm run release //generate cropper.min.js
+npm run start   //start local demo
 ```
