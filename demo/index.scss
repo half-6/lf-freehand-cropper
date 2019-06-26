@@ -1,0 +1,105 @@
+h1{
+  background-color: #323841;
+  color: #D259B1;
+  font-family: 'Oswald';
+  font-size: 1.45rem;
+  height: 50px;
+  line-height: 50px;
+  text-align: left;
+  display: flex;
+  margin:0;
+  img{
+    height: 30px;
+    margin: 10px;
+  }
+}
+.container-sidebar{
+  width: 50px;
+  background-color: #222830;
+  height: calc(100vh - 50px);
+  border-right: 1px solid #323841;
+  .icon {
+    display: block;
+    margin: 20px 10px;
+    position: relative;
+    border-radius: 10px;
+    &:hover{
+      background-color: #323841;
+    }
+    img{
+      height: 30px;
+      padding: 5px;
+    }
+    .upload{
+      font-size: 40px;
+      position: absolute;
+      top: 0;
+      right: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+  }
+}
+.container-body{
+  height: calc(100vh - 50px);
+  background-color: #222830;
+  canvas{
+    width:100%;
+    height: calc(100vh - 60px);
+  }
+}
+.container-pos{
+  top: 50px;
+  right: 0;
+  background-color: #222830;
+  //border-left: 1px solid #323841;
+  width: 260px;
+  color: #E2E8E8;
+  padding: 8px;
+  .item{
+     //height: 120px;
+     background-color: #323841;
+     margin-bottom: 10px;
+    img{
+      height: 80px;
+      width: 80px;
+      margin: 20px;
+      object-fit: scale-down;
+    }
+    .image-desc{
+      padding: 10px 0;
+      font-size: 12px;
+      font-family: 'Cardo';
+      word-break: break-all;
+    }
+  }
+}
+.toast{
+  position: absolute; top: 70px; right: 0;
+  background-color: #323841;
+  color: #E2E8E8;
+  .toast-header{
+    background-color: #323841;
+    color: #E2E8E8;
+    border-bottom: 1px solid #E2E8E8;
+    img{
+      height: 25px;
+    }
+  }
+  .close{
+    color: #E2E8E8;
+  }
+  .toast-body{
+    background-color: #323841;
+    padding-left: 30px;
+    ul{
+      //list-style: circle;
+      margin: 0;
+      padding: 0;
+      img{
+        height: 20px;
+        margin: 0 5px;
+      }
+    }
+  }
+}

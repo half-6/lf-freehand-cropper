@@ -6,7 +6,7 @@
   "private": false,
   "scripts": {
     "watch": "webpack --watch",
-    "build-demo":  "webpack  --config config/webpack.dev.js",
+    "build-demo": "webpack  --config config/webpack.dev.js",
     "release": "webpack  --config config/webpack.prod.js",
     "start": "webpack-dev-server --open  --config config/webpack.dev.js"
   },
@@ -28,13 +28,18 @@
   "license": "MIT",
   "devDependencies": {
     "clean-webpack-plugin": "^3.0.0",
+    "css-loader": "^3.0.0",
     "html-webpack-plugin": "^3.2.0",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
     "webpack": "^4.35.0",
     "webpack-cli": "^3.3.4",
     "webpack-dev-server": "^3.7.2",
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
+    "copy-webpack-plugin": "^5.0.3",
     "paper": "^0.12.2"
   }
 }

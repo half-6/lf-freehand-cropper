@@ -1,6 +1,8 @@
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
+
 const path = require('path');
 
 function resolve(dir) {
@@ -10,7 +12,7 @@ function resolve(dir) {
 module.exports = merge(common, {
     mode: 'development',
     entry: {
-        'demo':'./src/index.js',
+        'demo':'./demo/index.js',
     },
     output: {
         filename: 'js/[name].min.js',
@@ -22,7 +24,10 @@ module.exports = merge(common, {
             template: resolve('public/index.html'),
             favicon:  resolve('public/favicon.ico'),
             inject: false,
-        })
+        }),
+        new CopyPlugin([
+            { from: 'public/assets', to: 'assets' },
+        ]),
     ],
     devServer: {
         contentBase: './public'
