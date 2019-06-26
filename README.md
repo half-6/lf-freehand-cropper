@@ -1,6 +1,9 @@
 # LF Freehand image cropper
 Freehand image cropper built with HTML5 canvas
 
+## Demo
+https://cyokin.github.io/lf-freehand-cropper/ 
+![Alt Text](demo/cropper.gif)
 ## Project setup
 ```
 npm install @linkfuture/cropper
