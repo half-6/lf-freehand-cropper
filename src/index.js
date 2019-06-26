@@ -2,6 +2,7 @@ let cropper = new Cropper("canvas");
 let imageSource = null;
 $('#btnReset').click(cropper.clear);
 $('#btnPen').click(cropper.startPen);
+$('#btnRectangle').click(cropper.startRectangle);
 $('#btnGetPos').click(()=>{
     let imgList = cropper.getPos();
     $("textarea").val(JSON.stringify(imgList));

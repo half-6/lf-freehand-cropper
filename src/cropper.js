@@ -2,24 +2,29 @@ import paper from 'paper'
 import pen from './pen'
 import move from './move'
 
-paper.install(window);
 function cropper(canvasId) {
-    let canvas = (typeof canvasId ==="string")?document.getElementById(canvasId):"canvasId";
+    //install to global
+    paper.install(window);
+    let canvas = (typeof canvasId ==="string")?document.getElementById(canvasId):canvasId;
     paper.setup(canvas);
     let tool = new Tool();
     tool.moveable = true;
-    let myMove = new move(tool);
+    let myMove = new move(tool,canvas);
     myMove.start();
+    let myPen = new pen(tool,()=>{
+        myMove.start();
+    });
 
     let raster = new Raster();
     raster.position = view.center;
 
     function startPen() {
         myMove.stop();
-        let myPen = new pen(tool);
-        myPen.draw(()=>{
-            myMove.start();
-        });
+        myPen.draw();
+    }
+    function startRectangle() {
+        myMove.stop();
+        myPen.drawRectangle();
     }
     function getPos(){
         if(raster.source==="data:,") return;
@@ -68,17 +73,17 @@ function cropper(canvasId) {
         let canvas=document.createElement("CANVAS");
         canvas.width = imgPos.bounds.width;
         canvas.height = imgPos.bounds.height;
-        let _ctx=canvas.getContext("2d");
-        _ctx.save();
-        _ctx.beginPath();
-        _ctx.moveTo(imgPos.points[0].x - imgPos.bounds.x, imgPos.points[0].y - imgPos.bounds.y);
+        let ctx=canvas.getContext("2d");
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(imgPos.points[0].x - imgPos.bounds.x, imgPos.points[0].y - imgPos.bounds.y);
         for(let i=1;i<imgPos.points.length;i++)
         {
-            _ctx.lineTo(imgPos.points[i].x - imgPos.bounds.x, imgPos.points[i].y - imgPos.bounds.y);
+            ctx.lineTo(imgPos.points[i].x - imgPos.bounds.x, imgPos.points[i].y - imgPos.bounds.y);
         }
-        _ctx.clip();
-        _ctx.drawImage(raster.image,imgPos.bounds.x, imgPos.bounds.y, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
-        _ctx.restore(); /// restore de
+        ctx.clip();
+        ctx.drawImage(raster.image,imgPos.bounds.x, imgPos.bounds.y, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
+        ctx.restore(); /// restore de
         return canvas.toDataURL()
     }
     function setImage(source) {
@@ -105,6 +110,7 @@ function cropper(canvasId) {
         getImage,
         getPos,
         startPen,
+        startRectangle,
         clear,
         crop
     }

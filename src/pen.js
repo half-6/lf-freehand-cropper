@@ -1,11 +1,13 @@
-function pen(parent){
-    function draw(onDrawEnd) {
+function pen(parent,onDrawEnd){
+    let strokeColor = '#39f';
+    let fillColor = new Color(0,0,0,0.1);
+    function draw() {
         parent.moveable = false;
         let path = new Path();
         path.closed = false;
         path.selected = true;
-        path.strokeColor = '#39f';
-        path.fillColor = new Color(0,0,0,0.1);
+        path.strokeColor = strokeColor;
+        path.fillColor = fillColor;
 
         let movPoint = null;
         console.log("pen is start")
@@ -49,8 +51,20 @@ function pen(parent){
         }
         return path;
     }
+    function drawRectangle() {
+        parent.onMouseDown = (event)=>{
+            var rectangle = new Path.Rectangle(event.point.x,event.point.y,100,50);
+            rectangle.strokeColor = strokeColor;
+            rectangle.fillColor = fillColor;
+            rectangle.selected = true;
+            parent.onMouseDown = null;
+            if(onDrawEnd) onDrawEnd();
+        }
+
+    }
     return {
-        draw
+        draw,
+        drawRectangle
     }
 }
 

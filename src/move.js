@@ -1,8 +1,7 @@
-function move(parent){
-    var movingShift = new Point(0,0);
-    var selectedElement = null;
-    var scrollableElement = document.getElementById('container');
-    var hitOptions = {
+function move(parent,canvasElement){
+    let movingShift = new Point(0,0);
+    let selectedElement = null;
+    let hitOptions = {
         segments: true,
         stroke: true,
         fill: true,
@@ -11,7 +10,7 @@ function move(parent){
 
     function scaleOffset(obj,offset){
         var newScale = obj.scaling.x + offset;
-        if(offset< 0 && (obj.bounds.width * (1+offset) < 50 ||obj.bounds.height * (1+offset) < 50 )) return;
+        if(offset< 0 && (obj.bounds.width * (1+offset) < 20 ||obj.bounds.height * (1+offset) < 20 )) return;
         console.log(obj.bounds.width + " "  + obj.scaling.x)
         obj.scaling.x = newScale;
         obj.scaling.y = newScale;
@@ -19,7 +18,7 @@ function move(parent){
     function start() {
         parent.onMouseDown = function(event) {
             if(parent.moveable === false) return;
-            var hit = project.hitTest(event.point,hitOptions);
+            let hit = project.hitTest(event.point,hitOptions);
             disSelected();
             if (hit) {
                 if (event.modifiers.shift) {
@@ -52,7 +51,8 @@ function move(parent){
                 selectedPosition.y = event.point.y + movingShift.y;
             }
         }
-        scrollableElement.addEventListener('wheel', scroll);
+        canvasElement.removeEventListener('wheel', scroll)
+        canvasElement.addEventListener('wheel', scroll);
     }
     function disSelected() {
         if(selectedElement)
@@ -64,10 +64,10 @@ function move(parent){
     function stop() {
         disSelected();
         parent.onMouseDrag = parent.onMouseDown = null;
-        scrollableElement.removeEventListener('wheel', scroll)
+        canvasElement.removeEventListener('wheel', scroll)
     }
     function scroll(event){
-        var delta;
+        let delta;
         if (event.wheelDelta){
             delta = event.wheelDelta;
         }else{
