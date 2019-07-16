@@ -51,11 +51,12 @@ h1{
 .container-pos{
   top: 50px;
   right: 0;
-  background-color: #222830;
+  //background-color: #222830;
   //border-left: 1px solid #323841;
-  width: 260px;
+  width: 300px;
   color: #E2E8E8;
   padding: 8px;
+  position: absolute;
   .item{
      //height: 120px;
      background-color: #323841;
@@ -63,7 +64,7 @@ h1{
     img{
       height: 80px;
       width: 80px;
-      margin: 20px;
+      margin: 10px;
       object-fit: scale-down;
     }
     .image-desc{

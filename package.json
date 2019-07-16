@@ -1,6 +1,6 @@
 {
   "name": "@linkfuture/cropper",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Freehand image cropper",
   "main": "./src/cropper.js",
   "private": false,

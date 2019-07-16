@@ -28,8 +28,20 @@ $('#btnPos').click(()=>{
             //     //testContainer.append('<div style="left:${x}px;top:${y}px"/>'.replace("${x}",point.x).replace("${y}",point.y));
             //     testContainer.append(`<div>Size:${x} * 200</div>`);
             // })
-            output.push(`<div>Size:${image.bounds.width} * ${image.bounds.height}</div>`);
-            output.push(`<div>Points:${JSON.stringify(image.points)}</div>`);
+            output.push(`<div>Bound</div>`);
+            output.push(`<ul>`);
+            output.push(`<li>   Width:${image.bounds.width}, Height: ${image.bounds.height}</li>`);
+            image.boundPos.forEach(point=>{
+                output.push(`<li>X:${point.x} Y:${point.y}</li>`);
+            })
+            // output.push(`<li>   X:${image.bounds.x}, Y:${image.bounds.y}</li>`);
+            output.push(`</ul>`);
+            output.push(`<div>Points:</div>`);
+            output.push(`<ul>`);
+            image.points.forEach(point=>{
+                output.push(`<li>X:${point.x} Y:${point.y}</li>`);
+            })
+            output.push(`</ul>`);
             output.push(`</div>`);
             output.push(`</div>`);
         }

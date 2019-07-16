@@ -48,8 +48,16 @@ function cropper(canvasId) {
                     if(!minY || minY>newY) minY = newY;
                     if(!maxY || maxY<newY) maxY = newY;
                 }
+                let boundWidth = maxX-minX;
+                let boundHeight = maxY-minY;
                 let imgPos = {
-                    bounds:{x:minX,y:minY,width:maxX-minX,height:maxY-minY},
+                    bounds:{x:minX,y:minY,width:boundWidth,height:boundHeight},
+                    boundPos:[
+                        {x:minX,y:minY},
+                        {x:minX+boundWidth,y:minY},
+                        {x:minX+boundWidth,y:minY+boundHeight},
+                        {x:minX,y:minY+boundHeight},
+                        ],
                     points:realPos
                 };
                 output.push(imgPos);
