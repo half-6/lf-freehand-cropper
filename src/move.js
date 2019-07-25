@@ -1,4 +1,6 @@
-function move(parent,canvasElement){
+function move(parent,canvasElement,options){
+    //{move,select,zoom}
+    let me = {options};
     let movingShift = new Point(0,0);
     let selectedElement = null;
     let hitOptions = {
@@ -10,6 +12,7 @@ function move(parent,canvasElement){
 
     function scaleOffset(obj,offset){
         var newScale = obj.scaling.x + offset;
+        if(newScale<0.05) return;
         if(offset< 0 && (obj.bounds.width * (1+offset) < 20 ||obj.bounds.height * (1+offset) < 20 )) return;
         console.log(obj.bounds.width + " "  + obj.scaling.x)
         obj.scaling.x = newScale;
@@ -17,7 +20,7 @@ function move(parent,canvasElement){
     }
     function start() {
         parent.onMouseDown = function(event) {
-            if(parent.moveable === false) return;
+            if(me.options.select === false) return;
             let hit = project.hitTest(event.point,hitOptions);
             disSelected();
             if (hit) {
@@ -44,7 +47,7 @@ function move(parent,canvasElement){
             }
         }
         parent.onMouseDrag= function (event) {
-            if(parent.moveable === false) return;
+            if(me.options.move === false) return;
             if(selectedElement && selectedElement.selected){
                 var selectedPosition = selectedElement.position || selectedElement.point;
                 selectedPosition.x = event.point.x + movingShift.x;
@@ -67,6 +70,7 @@ function move(parent,canvasElement){
         canvasElement.removeEventListener('wheel', scroll)
     }
     function scroll(event){
+        if(!me.options.zoom) return;
         let delta;
         if (event.wheelDelta){
             delta = event.wheelDelta;
@@ -94,7 +98,8 @@ function move(parent,canvasElement){
     }
     return {
         start,
-        stop
+        stop,
+        options:me.options
     }
 }
 

@@ -2,28 +2,30 @@ import paper from 'paper'
 import pen from './pen'
 import move from './move'
 
-function cropper(canvasId) {
+function cropper(canvasId,options) {
+    let me=this;
+    me.options = Object.assign({move:true,select:true,zoom:true},options);
+
     //install to global
     paper.install(window);
     let canvas = (typeof canvasId ==="string")?document.getElementById(canvasId):canvasId;
     paper.setup(canvas);
     let tool = new Tool();
-    tool.moveable = true;
-    let myMove = new move(tool,canvas);
-    myMove.start();
+    let myMove = new move(tool,canvas,me.options);
+    startAction();
     let myPen = new pen(tool,()=>{
-        myMove.start();
+        startAction();
     });
 
     let raster = new Raster();
     raster.position = view.center;
 
     function startPen() {
-        myMove.stop();
+        stopAction();
         myPen.draw();
     }
     function startRectangle() {
-        myMove.stop();
+        stopAction();
         myPen.drawRectangle();
     }
     function getPos(){
@@ -67,9 +69,8 @@ function cropper(canvasId) {
     }
     function clear() {
         raster.position = view.center;
-        raster.scaling.x=1;
-        raster.scaling.y=1;
         paper.view.zoom = 1;
+        paper.project.layers[0].fitBounds(view.bounds,false)
         for(var i=project.layers[0].children.length-1;i>0;i--){
             let item = project.layers[0].children[i]
             if(item instanceof Path) {
@@ -101,7 +102,7 @@ function cropper(canvasId) {
             raster.source  = source;
             if(image.width > view.size.width)
             {
-                raster.fitBounds(view.bounds, true)
+                paper.project.layers[0].fitBounds(view.bounds,false)
             }
             else
             {
@@ -113,6 +114,12 @@ function cropper(canvasId) {
     function getImage() {
         return raster.source==="data:,"?undefined:raster.source;
     }
+    function startAction() {
+        myMove.start()
+    }
+    function stopAction() {
+        myMove.stop();
+    }
     return {
         setImage,
         getImage,
@@ -120,7 +127,8 @@ function cropper(canvasId) {
         startPen,
         startRectangle,
         clear,
-        crop
+        crop,
+        options:me.options
     }
 }
 window.Cropper = cropper;

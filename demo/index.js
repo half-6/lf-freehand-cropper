@@ -1,7 +1,7 @@
 import './index.scss'
 $('[data-toggle="tooltip"]').tooltip()
 $('.toast').toast('show')
-let cropper = new Cropper("canvas");
+window.cropper = new Cropper("canvas");
 cropper.setImage("assets/i/ele.jpg")
 let imageSource = null;
 $('#btnReset').click(()=>{
@@ -30,16 +30,16 @@ $('#btnPos').click(()=>{
             // })
             output.push(`<div>Bound</div>`);
             output.push(`<ul>`);
-            output.push(`<li>   Width:${image.bounds.width}, Height: ${image.bounds.height}</li>`);
+            output.push(`<li>   Size:${toFixed(image.bounds.width)} * ${toFixed(image.bounds.height)}</li>`);
             image.boundPos.forEach(point=>{
-                output.push(`<li>X:${point.x} Y:${point.y}</li>`);
+                output.push(`<li>X:${toFixed(point.x)} Y:${toFixed(point.y)}</li>`);
             })
             // output.push(`<li>   X:${image.bounds.x}, Y:${image.bounds.y}</li>`);
             output.push(`</ul>`);
             output.push(`<div>Points:</div>`);
             output.push(`<ul>`);
             image.points.forEach(point=>{
-                output.push(`<li>X:${point.x} Y:${point.y}</li>`);
+                output.push(`<li>X:${toFixed(point.x)} Y:${toFixed(point.y)}</li>`);
             })
             output.push(`</ul>`);
             output.push(`</div>`);
@@ -48,6 +48,9 @@ $('#btnPos').click(()=>{
     )
     testContainer.html(output.join(""));
 });
+function toFixed(num){
+    return parseFloat(num).toFixed(3);
+}
 window.openImage = function(data){
     var image = new Image();
     image.src = data;
