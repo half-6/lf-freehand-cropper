@@ -1,6 +1,6 @@
 {
   "name": "@linkfuture/cropper",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "Freehand image cropper",
   "main": "./src/cropper.js",
   "private": false,
@@ -34,7 +34,7 @@
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
     "webpack": "^4.35.0",
-    "webpack-cli": "^3.3.4",
+    "webpack-cli": "^3.3.6",
     "webpack-dev-server": "^3.7.2",
     "webpack-merge": "^4.2.1"
   },

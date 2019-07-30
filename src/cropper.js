@@ -7,9 +7,13 @@ function cropper(canvasId,options) {
     me.options = Object.assign({move:true,select:true,zoom:true},options);
 
     //install to global
-    paper.install(window);
+    if(!window.paper) {
+        paper.install(window);
+    }
+
     let canvas = (typeof canvasId ==="string")?document.getElementById(canvasId):canvasId;
     paper.setup(canvas);
+
     let tool = new Tool();
     let myMove = new move(tool,canvas,me.options);
     startAction();
@@ -59,7 +63,7 @@ function cropper(canvasId,options) {
                         {x:minX+boundWidth,y:minY},
                         {x:minX+boundWidth,y:minY+boundHeight},
                         {x:minX,y:minY+boundHeight},
-                        ],
+                    ],
                     points:realPos
                 };
                 output.push(imgPos);
@@ -70,13 +74,20 @@ function cropper(canvasId,options) {
     function clear() {
         raster.position = view.center;
         paper.view.zoom = 1;
-        paper.project.layers[0].fitBounds(view.bounds,false)
-        for(var i=project.layers[0].children.length-1;i>0;i--){
-            let item = project.layers[0].children[i]
-            if(item instanceof Path) {
-                item.remove();
+        for(var j=0;j<project.layers.length;j++){
+            let layer = project.layers[j];
+            for(var i=layer.children.length-1;i>0;i--){
+                let item = layer.children[i]
+                if(item instanceof Path) {
+                    let item = layer.children[i]
+                    item.remove();
+                }
             }
         }
+    }
+    function destroy() {
+        raster.clear();
+        this.clear();
     }
     function crop(imgPos){
         let canvas=document.createElement("CANVAS");
@@ -93,6 +104,16 @@ function cropper(canvasId,options) {
         ctx.clip();
         ctx.drawImage(raster.image,imgPos.bounds.x, imgPos.bounds.y, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
         ctx.restore(); /// restore de
+        return canvas.toDataURL()
+    }
+    function cropBounds(imgPos) {
+        let canvas=document.createElement("CANVAS");
+        canvas.width = imgPos.bounds.width;
+        canvas.height = imgPos.bounds.height;
+        let ctx=canvas.getContext("2d");
+        ctx.save();
+        ctx.drawImage(raster.image,imgPos.bounds.x, imgPos.bounds.y, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
+        ctx.restore();
         return canvas.toDataURL()
     }
     function setImage(source) {
@@ -127,7 +148,9 @@ function cropper(canvasId,options) {
         startPen,
         startRectangle,
         clear,
+        destroy,
         crop,
+        cropBounds,
         options:me.options
     }
 }

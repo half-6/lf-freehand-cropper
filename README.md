@@ -15,7 +15,7 @@ cropper.startPen(); //start crop by using pen
 cropper.getPos();   //get position list of cropper 
 cropper.clear();    //clear all drawing, but for the image
 cropper.crop(imgPos);  //get croppered image by passing image position, which given by cropper.getPos()
-cropper.options;  //set or set options
+cropper.options;  //get or set options
 
 ```
 
