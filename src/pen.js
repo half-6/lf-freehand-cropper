@@ -1,14 +1,6 @@
-function pen(parent,onDrawEnd){
-    let strokeColor = '#39f';
-    let fillColor = new Color(0,0,0,0.1);
-    function draw() {
-        parent.moveable = false;
-        let path = new Path();
-        path.closed = false;
-        path.selected = true;
-        path.strokeColor = strokeColor;
-        path.fillColor = fillColor;
-
+function pen(parent,onDrawEnd,options){
+    function drawPath() {
+        let path = initPath(options)
         let movPoint = null;
         console.log("pen is start")
         parent.onMouseDown = (event)=>{
@@ -25,7 +17,6 @@ function pen(parent,onDrawEnd){
                     // path.selected = false;
                     parent.onMouseDown = null;
                     parent.onMouseMove = null;
-                    parent.moveable = true;
                     path.selected = false;
                     if(onDrawEnd) onDrawEnd();
                     return;
@@ -54,16 +45,35 @@ function pen(parent,onDrawEnd){
     function drawRectangle() {
         parent.onMouseDown = (event)=>{
             var rectangle = new Path.Rectangle(event.point.x,event.point.y,100,50);
-            rectangle.strokeColor = strokeColor;
-            rectangle.fillColor = fillColor;
+            rectangle.strokeColor = options.strokeColor;
+            rectangle.selectedColor = options.selectedColor;
+            rectangle.fillColor = options.fillColor;
             rectangle.selected = true;
             parent.onMouseDown = null;
             if(onDrawEnd) onDrawEnd();
         }
-
+    }
+    function initPath(options) {
+        let path = new Path();
+        path.closed = false;
+        path.selected = true;
+        path.strokeColor = options.strokeColor;
+        path.selectedColor = options.selectedColor;
+        path.fillColor = options.fillColor;
+        return path;
+    }
+    function draw(points,options) {
+        let path = initPath(options)
+        for(let i=0;i<points.length;i++){
+            let point = points[i];
+            path.lineTo(point);
+        }
+        path.closed = true;
+        path.selected = false;
     }
     return {
         draw,
+        drawPath,
         drawRectangle
     }
 }

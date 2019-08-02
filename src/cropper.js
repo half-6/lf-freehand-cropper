@@ -1,32 +1,35 @@
 import paper from 'paper'
 import pen from './pen'
 import move from './move'
-
 function cropper(canvasId,options) {
     let me=this;
-    me.options = Object.assign({move:true,select:true,zoom:true},options);
-
     //install to global
     if(!window.paper) {
         paper.install(window);
     }
 
+    const defaultOption = {move:true,select:true,zoom:true,strokeColor:"#39f",selectedColor:null,fillColor:new Color(0,0,0,0.1)};
+    me.options = Object.assign(defaultOption,options);
+
     let canvas = (typeof canvasId ==="string")?document.getElementById(canvasId):canvasId;
     paper.setup(canvas);
+    canvas.oncontextmenu = function (e) {
+        e.preventDefault();
+    };
 
     let tool = new Tool();
     let myMove = new move(tool,canvas,me.options);
     startAction();
     let myPen = new pen(tool,()=>{
         startAction();
-    });
+    },me.options);
 
     let raster = new Raster();
     raster.position = view.center;
 
     function startPen() {
         stopAction();
-        myPen.draw();
+        myPen.drawPath();
     }
     function startRectangle() {
         stopAction();
@@ -141,6 +144,17 @@ function cropper(canvasId,options) {
     function stopAction() {
         myMove.stop();
     }
+    function draw(points,options) {
+        let newPoints = [...points];
+        let imgX = raster.bounds.x;
+        let imgY = raster.bounds.y;
+        for(let i=0;i<newPoints.length;i++){
+            let newPoint = newPoints[i];
+            newPoint.x = newPoint.x * raster.scaling.x + imgX;
+            newPoint.y= newPoint.y * raster.scaling.y + imgY;
+        }
+        return myPen.draw(points,Object.assign(defaultOption,options))
+    }
     return {
         setImage,
         getImage,
@@ -151,7 +165,9 @@ function cropper(canvasId,options) {
         destroy,
         crop,
         cropBounds,
-        options:me.options
+        options:me.options,
+        objects:project.layers[0].children,
+        draw
     }
 }
 window.Cropper = cropper;

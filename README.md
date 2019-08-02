@@ -15,8 +15,13 @@ cropper.startPen(); //start crop by using pen
 cropper.getPos();   //get position list of cropper 
 cropper.clear();    //clear all drawing, but for the image
 cropper.crop(imgPos);  //get croppered image by passing image position, which given by cropper.getPos()
+cropper.draw(points,options);  //draw sharp by given points
 cropper.options;  //get or set options
-
+cropper.objects[1].move //boolean, moveable
+cropper.objects[1].zoom //boolean, zoomable
+cropper.objects[1].locked //boolean, can't select and move
+cropper.objects[1].selectedColor //color when selected
+cropper.objects[1].strokeColor //color for pen 
 ```
 
 ### Compiles and minifies for production

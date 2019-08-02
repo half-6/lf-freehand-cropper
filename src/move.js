@@ -47,7 +47,7 @@ function move(parent,canvasElement,options){
             }
         }
         parent.onMouseDrag= function (event) {
-            if(me.options.move === false) return;
+            if(me.options.move === false || !selectedElement || selectedElement.move === false) return;
             if(selectedElement && selectedElement.selected){
                 var selectedPosition = selectedElement.position || selectedElement.point;
                 selectedPosition.x = event.point.x + movingShift.x;
@@ -70,7 +70,7 @@ function move(parent,canvasElement,options){
         canvasElement.removeEventListener('wheel', scroll)
     }
     function scroll(event){
-        if(!me.options.zoom) return;
+        if(!me.options.zoom || !selectedElement || selectedElement.zoom === false) return;
         let delta;
         if (event.wheelDelta){
             delta = event.wheelDelta;
