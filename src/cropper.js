@@ -7,11 +7,22 @@ function cropper(canvasId,options) {
     if(!window.paper) {
         paper.install(window);
     }
+    const defaultOption = {
+        move:true,
+        select:true,
+        zoom:true,
+        fullZoom:true,
+        strokeColor:"#39f",
+        selectedColor:null,
+        fillColor:new Color(0,0,0,0.1),
+        onDrawEnd:null,
+        onSelected:null
+    };
 
-    const defaultOption = {move:true,select:true,zoom:true,strokeColor:"#39f",selectedColor:null,fillColor:new Color(0,0,0,0.1)};
-    me.options = Object.assign(defaultOption,options);
+    me.options = Object.assign({},defaultOption,options);
 
     let canvas = (typeof canvasId ==="string")?document.getElementById(canvasId):canvasId;
+    if(!canvas) throw new Error("canvas does not exist")
     paper.setup(canvas);
     canvas.oncontextmenu = function (e) {
         e.preventDefault();
@@ -27,49 +38,22 @@ function cropper(canvasId,options) {
     let raster = new Raster();
     raster.position = view.center;
 
-    function startPen() {
+    function startPen(option) {
         stopAction();
-        myPen.drawPath();
+        myPen.drawPath(Object.assign({},me.options,option));
     }
-    function startRectangle() {
+    function startRectangle(option) {
         stopAction();
-        myPen.drawRectangle();
+        myPen.drawRectangle(Object.assign({},me.options,option));
     }
     function getPos(){
         if(raster.source==="data:,") return;
         let output = [];
-        let x = raster.bounds.x;
-        let y = raster.bounds.y;
         for(let i=0;i<project.layers[0].children.length;i++)
         {
             let item = project.layers[0].children[i]
-            let realPos = [];
             if(item instanceof Path){
-                let path = item;
-                let minX,maxX,minY,maxY;
-                for(let j=0; j < path.curves.length; j++) {
-                    let point = path.curves[j].points[0];
-                    let newX = (point.x  - x)/ raster.scaling.x;
-                    let newY = (point.y - y) / raster.scaling.x;
-                    realPos.push({x:newX,y:newY})
-                    if(!minX || minX>newX) minX = newX;
-                    if(!maxX || maxX<newX) maxX = newX;
-                    if(!minY || minY>newY) minY = newY;
-                    if(!maxY || maxY<newY) maxY = newY;
-                }
-                let boundWidth = maxX-minX;
-                let boundHeight = maxY-minY;
-                let imgPos = {
-                    bounds:{x:minX,y:minY,width:boundWidth,height:boundHeight},
-                    boundPos:[
-                        {x:minX,y:minY},
-                        {x:minX+boundWidth,y:minY},
-                        {x:minX+boundWidth,y:minY+boundHeight},
-                        {x:minX,y:minY+boundHeight},
-                    ],
-                    points:realPos
-                };
-                output.push(imgPos);
+                output.push(item.getPos());
             }
         }
         return output;
@@ -144,7 +128,7 @@ function cropper(canvasId,options) {
     function stopAction() {
         myMove.stop();
     }
-    function draw(points,options) {
+    function draw(points,option) {
         let newPoints = [...points];
         let imgX = raster.bounds.x;
         let imgY = raster.bounds.y;
@@ -153,7 +137,36 @@ function cropper(canvasId,options) {
             newPoint.x = newPoint.x * raster.scaling.x + imgX;
             newPoint.y= newPoint.y * raster.scaling.y + imgY;
         }
-        return myPen.draw(points,Object.assign(defaultOption,options))
+        return myPen.draw(points,Object.assign({},me.options,option))
+    }
+
+    Path.prototype.getPos = function () {
+        let x = raster.bounds.x;
+        let y = raster.bounds.y;
+        let realPos = [];
+        let minX,maxX,minY,maxY;
+        for(let j=0; j < this.curves.length; j++) {
+            let point = this.curves[j].points[0];
+            let newX = (point.x  - x)/ raster.scaling.x;
+            let newY = (point.y - y) / raster.scaling.x;
+            realPos.push({x:newX,y:newY})
+            if(!minX || minX>newX) minX = newX;
+            if(!maxX || maxX<newX) maxX = newX;
+            if(!minY || minY>newY) minY = newY;
+            if(!maxY || maxY<newY) maxY = newY;
+        }
+        let boundWidth = maxX-minX;
+        let boundHeight = maxY-minY;
+        return {
+            bounds:{x:minX,y:minY,width:boundWidth,height:boundHeight},
+            boundPos:[
+                {x:minX,y:minY},
+                {x:minX+boundWidth,y:minY},
+                {x:minX+boundWidth,y:minY+boundHeight},
+                {x:minX,y:minY+boundHeight},
+            ],
+            points:realPos
+        };
     }
     return {
         setImage,

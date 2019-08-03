@@ -24,6 +24,12 @@ function move(parent,canvasElement,options){
             let hit = project.hitTest(event.point,hitOptions);
             disSelected();
             if (hit) {
+                if (event.modifiers.shift && event.modifiers.control) {
+                    if (hit.item instanceof Path) {
+                        hit.item.remove();
+                    }
+                    return;
+                }
                 if (event.modifiers.shift) {
                     if (hit.type === 'segment') {
                         hit.segment.remove();
@@ -40,6 +46,8 @@ function move(parent,canvasElement,options){
                 selectedElement = hit.segment ||  hit.item;
                 console.log(`click ${event.point} with selected ${JSON.stringify(selectedElement)}`)
                 selectedElement.selected = true;
+                if(me.options.onSelected) me.options.onSelected(hit.item);
+                if(selectedElement.onSelected) selectedElement.onSelected(selectedElement);
                 //hit.item.crossings[0].segment.selected = true;
                 var selectedPosition = selectedElement.position || selectedElement.point;
                 movingShift.x = selectedPosition.x - event.point.x;
@@ -70,7 +78,6 @@ function move(parent,canvasElement,options){
         canvasElement.removeEventListener('wheel', scroll)
     }
     function scroll(event){
-        if(!me.options.zoom || !selectedElement || selectedElement.zoom === false) return;
         let delta;
         if (event.wheelDelta){
             delta = event.wheelDelta;
@@ -80,20 +87,32 @@ function move(parent,canvasElement,options){
         event.preventDefault(); // Limit wheel speed to prevent zoom too fast (#21)
         if (delta < 0){
             //console.log("DOWN");
-            if(selectedElement && selectedElement.selected)
+            if(me.options.zoom && selectedElement && selectedElement.selected && selectedElement.zoom !== false)
             {
                 scaleOffset(selectedElement,-0.1);
                 return;
             }
-            //zoomIn()
-        }else if (delta > 0){
+            zoomIn()
+        }
+        else if (delta > 0){
             //console.log("UP");
-            if(selectedElement && selectedElement.selected)
+            if(me.options.zoom && selectedElement && selectedElement.selected  && selectedElement.zoom !== false)
             {
                 scaleOffset(selectedElement,0.1);
                 return;
             }
-            //zoomOut();
+            zoomOut();
+        }
+    }
+    function zoomIn() {
+        if(me.options.fullZoom && parseFloat(project.view.zoom).toFixed(1)>0.1)
+        {
+            project.view.zoom -= 0.1
+        }
+    }
+    function zoomOut() {
+        if(me.options.fullZoom){
+            project.view.zoom += 0.1
         }
     }
     return {

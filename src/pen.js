@@ -1,6 +1,6 @@
 function pen(parent,onDrawEnd,options){
-    function drawPath() {
-        let path = initPath(options)
+    function drawPath(option) {
+        let path = initPath(Object.assign({},options,option))
         let movPoint = null;
         console.log("pen is start")
         parent.onMouseDown = (event)=>{
@@ -19,6 +19,7 @@ function pen(parent,onDrawEnd,options){
                     parent.onMouseMove = null;
                     path.selected = false;
                     if(onDrawEnd) onDrawEnd();
+                    if(option && option.onDrawEnd) option.onDrawEnd(path);
                     return;
                 }
             }
@@ -42,7 +43,7 @@ function pen(parent,onDrawEnd,options){
         }
         return path;
     }
-    function drawRectangle() {
+    function drawRectangle(option) {
         parent.onMouseDown = (event)=>{
             var rectangle = new Path.Rectangle(event.point.x,event.point.y,100,50);
             rectangle.strokeColor = options.strokeColor;
@@ -51,25 +52,29 @@ function pen(parent,onDrawEnd,options){
             rectangle.selected = true;
             parent.onMouseDown = null;
             if(onDrawEnd) onDrawEnd();
+            if(option && option.onDrawEnd) option.onDrawEnd(path);
         }
     }
-    function initPath(options) {
+    function initPath(option) {
         let path = new Path();
+        path.name = option.name;
         path.closed = false;
-        path.selected = true;
-        path.strokeColor = options.strokeColor;
-        path.selectedColor = options.selectedColor;
-        path.fillColor = options.fillColor;
+        path.selected = option.selected || true;
+        path.locked = option.locked || false;
+        path.strokeColor = option.strokeColor;
+        path.selectedColor = option.selectedColor;
+        path.fillColor = option.fillColor;
         return path;
     }
-    function draw(points,options) {
-        let path = initPath(options)
+    function draw(points,option) {
+        let path = initPath(option)
         for(let i=0;i<points.length;i++){
             let point = points[i];
             path.lineTo(point);
         }
         path.closed = true;
         path.selected = false;
+        return path;
     }
     return {
         draw,
