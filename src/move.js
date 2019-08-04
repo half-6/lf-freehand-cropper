@@ -43,24 +43,40 @@ function move(parent,canvasElement,options){
                     }
                     return;
                 }
-                selectedElement = hit.segment ||  hit.item;
+                selectedElement = hit.segment || hit.item;
                 console.log(`click ${event.point} with selected ${JSON.stringify(selectedElement)}`)
                 selectedElement.selected = true;
-                if(me.options.onSelected) me.options.onSelected(hit.item);
-                if(selectedElement.onSelected) selectedElement.onSelected(selectedElement);
+                if (me.options.onSelected) me.options.onSelected(hit.item);
+                if (selectedElement.onSelected) selectedElement.onSelected(selectedElement);
                 //hit.item.crossings[0].segment.selected = true;
+            }
+            if(me.options.move && selectedElement && selectedElement.move !== false){
                 var selectedPosition = selectedElement.position || selectedElement.point;
+                movingShift.x = selectedPosition.x - event.point.x;
+                movingShift.y = selectedPosition.y - event.point.y;
+                return;
+            }
+            if(me.options.fullMove)
+            {
+                var selectedPosition = project.activeLayer.position;
                 movingShift.x = selectedPosition.x - event.point.x;
                 movingShift.y = selectedPosition.y - event.point.y;
             }
         }
         parent.onMouseDrag= function (event) {
-            if(me.options.move === false || !selectedElement || selectedElement.move === false) return;
-            if(selectedElement && selectedElement.selected){
+            if(me.options.move && selectedElement && selectedElement.move !== false && !selectedElement.locked  && selectedElement.selected){
                 var selectedPosition = selectedElement.position || selectedElement.point;
                 selectedPosition.x = event.point.x + movingShift.x;
                 selectedPosition.y = event.point.y + movingShift.y;
+                return;
             }
+            if(me.options.fullMove)
+            {
+                project.activeLayer.position.x = event.point.x + movingShift.x;
+                project.activeLayer.position.y = event.point.y + movingShift.y;
+                return;
+            }
+
         }
         canvasElement.removeEventListener('wheel', scroll)
         canvasElement.addEventListener('wheel', scroll);

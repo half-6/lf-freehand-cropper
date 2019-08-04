@@ -3,6 +3,7 @@ import pen from './pen'
 import move from './move'
 function cropper(canvasId,options) {
     let me=this;
+    console.log('init cropper')
     //install to global
     if(!window.paper) {
         paper.install(window);
@@ -45,6 +46,21 @@ function cropper(canvasId,options) {
     function startRectangle(option) {
         stopAction();
         myPen.drawRectangle(Object.assign({},me.options,option));
+    }
+    /*
+     * full move model
+     * it will move image and drawing object when you selected image
+     * it will move path if you selected path
+     */
+    function enableFullMove() {
+        raster.move = false;
+        raster.zoom = false;
+        me.options.fullMove = true;
+    }
+    function disableFullMove() {
+        raster.move = true;
+        raster.zoom = true;
+        me.options.fullMove = false;
     }
     function getPos(){
         if(raster.source==="data:,") return;
@@ -180,7 +196,9 @@ function cropper(canvasId,options) {
         cropBounds,
         options:me.options,
         objects:project.layers[0].children,
-        draw
+        draw,
+        enableFullMove,
+        disableFullMove
     }
 }
 window.Cropper = cropper;

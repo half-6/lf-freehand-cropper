@@ -20,6 +20,8 @@ https://cyokin.github.io/lf-freehand-cropper/
     cropper.crop(imgPos);  //get croppered image by passing image position, which given by cropper.getPos()
     cropper.draw(points,option);  //draw sharp by given points, options.onDrawEnd(path) event.
     cropper.options;  //get or set options
+    cropper.enableFullMove(); // enable full move model, any drawing object will be moved or zoom with the image. 
+    cropper.disableFullMove(); // disable full move model, image and drawing object will be moved or zoom by selected 
     cropper.objects[1].getPos() //get object position, which related to the image
     cropper.objects[1].move //boolean, moveable
     cropper.objects[1].zoom //boolean, zoomable
