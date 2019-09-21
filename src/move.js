@@ -38,8 +38,8 @@ function move(parent,canvasElement,options){
                 }
                 if (event.modifiers.control) {
                     if (hit.type === 'stroke') {
-                        var location = hit.location;
-                        var segment = hit.item.insert(location.index + 1, event.point);
+                        let location = hit.location;
+                        let segment = hit.item.insert(location.index + 1, event.point);
                     }
                     return;
                 }
@@ -51,21 +51,21 @@ function move(parent,canvasElement,options){
                 //hit.item.crossings[0].segment.selected = true;
             }
             if(me.options.move && selectedElement && selectedElement.move !== false){
-                var selectedPosition = selectedElement.position || selectedElement.point;
+                let selectedPosition = selectedElement.position || selectedElement.point;
                 movingShift.x = selectedPosition.x - event.point.x;
                 movingShift.y = selectedPosition.y - event.point.y;
                 return;
             }
             if(me.options.fullMove)
             {
-                var selectedPosition = project.activeLayer.position;
+                let selectedPosition = project.activeLayer.position;
                 movingShift.x = selectedPosition.x - event.point.x;
                 movingShift.y = selectedPosition.y - event.point.y;
             }
         }
         parent.onMouseDrag= function (event) {
             if(me.options.move && selectedElement && selectedElement.move !== false && !selectedElement.locked  && selectedElement.selected){
-                var selectedPosition = selectedElement.position || selectedElement.point;
+                let selectedPosition = selectedElement.position || selectedElement.point;
                 selectedPosition.x = event.point.x + movingShift.x;
                 selectedPosition.y = event.point.y + movingShift.y;
                 return;

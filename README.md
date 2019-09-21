@@ -16,7 +16,7 @@ https://cyokin.github.io/lf-freehand-cropper/
     cropper.startPen(option); //start crop by using pen 
     cropper.getPos();   //get position list of object,  which related to the image
     cropper.clear();    //clear all drawing, but for the image
-    cropper.destroy();    //clear all drawing and image
+    cropper.destroy();    //clear all drawing and image, destory paper objects
     cropper.crop(imgPos);  //get croppered image by passing image position, which given by cropper.getPos()
     cropper.draw(points,option);  //draw sharp by given points, options.onDrawEnd(path) event.
     cropper.options;  //get or set options

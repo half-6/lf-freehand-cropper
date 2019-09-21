@@ -5,6 +5,7 @@ function cropper(canvasId,options) {
     let me=this;
     console.log('init cropper')
     //install to global
+    destroy()
     if(!window.paper) {
         paper.install(window);
     }
@@ -75,11 +76,11 @@ function cropper(canvasId,options) {
         return output;
     }
     function clear() {
-        raster.position = view.center;
+        if(raster) raster.position = view.center;
         paper.view.zoom = 1;
-        for(var j=0;j<project.layers.length;j++){
+        for(let j=0;j<project.layers.length;j++){
             let layer = project.layers[j];
-            for(var i=layer.children.length-1;i>0;i--){
+            for(let i=layer.children.length-1;i>0;i--){
                 let item = layer.children[i]
                 if(item instanceof Path) {
                     let item = layer.children[i]
@@ -89,8 +90,15 @@ function cropper(canvasId,options) {
         }
     }
     function destroy() {
-        raster.clear();
-        this.clear();
+        if(paper && paper.projects && paper.projects.length > 0){
+            console.log('destroy cropper')
+            if(raster) raster.clear();
+            clear();
+            paper.tool.remove();
+            paper.project.clear();
+            paper.projects = [];
+            paper.remove();
+        }
     }
     function crop(imgPos){
         let canvas=document.createElement("CANVAS");

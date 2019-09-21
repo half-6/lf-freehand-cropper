@@ -7,4 +7,4 @@ npm publish --access=public
 
 # local test steps
 npm pack
-npm install D:\codes\linkfuture\lf-freehand-cropper\linkfuture-cropper-0.0.8.tgz
+npm install D:\codes\linkfuture\lf-freehand-cropper\linkfuture-cropper-0.0.9.tgz
