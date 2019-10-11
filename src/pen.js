@@ -7,7 +7,7 @@ function pen(parent,onDrawEnd,options){
             if(path.curves.length > 0)
             {
                 //close on loop back to first one
-                var fPoint = path.curves[0].points[0];
+                let fPoint = path.curves[0].points[0];
                 if(Math.abs(event.point.x - fPoint.x)<5 && Math.abs(event.point.y - fPoint.y)<5)
                 {
                     path.closed = true;
@@ -36,7 +36,7 @@ function pen(parent,onDrawEnd,options){
             }
             if(!path.closed)
             {
-                var newPoint = event.point.clone();
+                let newPoint = event.point.clone();
                 path.lineTo(newPoint);
                 movPoint = newPoint;
             }
@@ -44,15 +44,59 @@ function pen(parent,onDrawEnd,options){
         return path;
     }
     function drawRectangle(option) {
+        console.log("rectangle is start")
+        let path = initPath(Object.assign({},options,option));
+        let startPoint = null;
+        let movPoint = null;
         parent.onMouseDown = (event)=>{
-            var rectangle = new Path.Rectangle(event.point.x,event.point.y,100,50);
-            rectangle.strokeColor = options.strokeColor;
-            rectangle.selectedColor = options.selectedColor;
-            rectangle.fillColor = options.fillColor;
-            rectangle.selected = true;
+            parent.onMouseMove = null;
+            if(!startPoint)
+            {
+                startPoint = event.point.clone();
+                movPoint = null;
+                path.segments[0].point = startPoint
+                let width = 12;
+                let height = 12;
+                path.lineTo(new Point(startPoint.x + width,startPoint.y));
+                path.lineTo(new Point(startPoint.x + width,startPoint.y + height));
+                path.lineTo(new Point(startPoint.x,startPoint.y + height));
+                path.closed = true;
+            }
+        }
+        parent.onMouseDrag = (event)=> {
             parent.onMouseDown = null;
+            if(startPoint)
+            {
+                let newPos = event.point.clone();
+                path.segments[1].point.x =  newPos.x;
+                path.segments[2].point= newPos;
+                path.segments[3].point.y =  newPos.y;
+            }
+        }
+        parent.onMouseUp = (event)=> {
+            startPoint = null;
+            parent.onMouseDrag = null;
+            parent.onMouseUp = null;
+            path.selected = false;
             if(onDrawEnd) onDrawEnd();
             if(option && option.onDrawEnd) option.onDrawEnd(path);
+            console.log("rectangle is end")
+        }
+        parent.onMouseMove = (event)=> {
+            if(!startPoint && !path.closed)
+            {
+                if(!movPoint)
+                {
+                    let newPoint = event.point.clone();
+                    path.lineTo(newPoint);
+                    movPoint = newPoint;
+                }
+                else
+                {
+                    path.segments[0].point.x = event.point.x;
+                    path.segments[0].point.y = event.point.y;
+                }
+            }
         }
     }
     function initPath(option) {

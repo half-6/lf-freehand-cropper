@@ -43,6 +43,18 @@ function move(parent,canvasElement,options){
                     }
                     return;
                 }
+                if (hit.type === 'stroke') {
+                    selectedElement = hit.location.curve;
+                    selectedElement.selected = true;
+                    console.log(`click ${event.point} on stroke ${selectedElement.point1} ${selectedElement.point2}`);
+                    movingShift.x = event.point.x;
+                    movingShift.y = event.point.y;
+                    selectedElement.point1.oldX = selectedElement.point1.x;
+                    selectedElement.point1.oldY = selectedElement.point1.y;
+                    selectedElement.point2.oldX = selectedElement.point2.x;
+                    selectedElement.point2.oldY = selectedElement.point2.y;
+                    return;
+                }
                 selectedElement = hit.segment || hit.item;
                 console.log(`click ${event.point} with selected ${JSON.stringify(selectedElement)}`)
                 selectedElement.selected = true;
@@ -65,9 +77,21 @@ function move(parent,canvasElement,options){
         }
         parent.onMouseDrag= function (event) {
             if(me.options.move && selectedElement && selectedElement.move !== false && !selectedElement.locked  && selectedElement.selected){
-                let selectedPosition = selectedElement.position || selectedElement.point;
-                selectedPosition.x = event.point.x + movingShift.x;
-                selectedPosition.y = event.point.y + movingShift.y;
+                if(selectedElement instanceof Curve)
+                {
+                    let addX = event.point.x - movingShift.x;
+                    let addY = event.point.y - movingShift.y;
+                    selectedElement.point1.x = selectedElement.point1.oldX + addX;
+                    selectedElement.point1.y = selectedElement.point1.oldY + addY;
+                    selectedElement.point2.x = selectedElement.point2.oldX + addX;
+                    selectedElement.point2.y = selectedElement.point2.oldY + addY;
+                }
+                else
+                {
+                    let selectedPosition = selectedElement.position || selectedElement.point;
+                    selectedPosition.x = event.point.x + movingShift.x;
+                    selectedPosition.y = event.point.y + movingShift.y;
+                }
                 return;
             }
             if(me.options.fullMove)

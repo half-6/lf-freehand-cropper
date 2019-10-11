@@ -14,6 +14,8 @@ https://cyokin.github.io/lf-freehand-cropper/
     cropper.setImage("<backgaround image source>");//backgaround image source, url or base64 image string
     cropper.getImage(); //get image source
     cropper.startPen(option); //start crop by using pen 
+    cropper.startRectangle(option); //start draw a rectangle for cropping 
+
     cropper.getPos();   //get position list of object,  which related to the image
     cropper.clear();    //clear all drawing, but for the image
     cropper.destroy();    //clear all drawing and image, destory paper objects
