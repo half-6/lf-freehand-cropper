@@ -6,6 +6,9 @@ function resolve(dir) {
 }
 
 module.exports = {
+    devServer: {
+        host: '0.0.0.0'
+    },
     entry: {
         'lf-cropper':'./src/cropper.js',
     },

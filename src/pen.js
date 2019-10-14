@@ -48,13 +48,21 @@ function pen(parent,onDrawEnd,options){
         let path = initPath(Object.assign({},options,option));
         let startPoint = null;
         let movPoint = null;
-        parent.onMouseDown = (event)=>{
+        parent.onMouseDown = parent.onTouchStart = (event)=>{
             parent.onMouseMove = null;
             if(!startPoint)
             {
                 startPoint = event.point.clone();
                 movPoint = null;
-                path.segments[0].point = startPoint
+                if(path.segments.length===0)
+                {
+                    path.lineTo(startPoint)
+                }
+                else
+                {
+                    path.segments[0].point = startPoint
+                }
+
                 let width = 12;
                 let height = 12;
                 path.lineTo(new Point(startPoint.x + width,startPoint.y));
@@ -63,8 +71,9 @@ function pen(parent,onDrawEnd,options){
                 path.closed = true;
             }
         }
-        parent.onMouseDrag = (event)=> {
+        parent.onMouseDrag = parent.onTouchMove = (event)=> {
             parent.onMouseDown = null;
+            parent.onTouchStart = null;
             if(startPoint)
             {
                 let newPos = event.point.clone();
@@ -76,6 +85,7 @@ function pen(parent,onDrawEnd,options){
         parent.onMouseUp = (event)=> {
             startPoint = null;
             parent.onMouseDrag = null;
+            parent.onTouchMove = null;
             parent.onMouseUp = null;
             path.selected = false;
             if(onDrawEnd) onDrawEnd();
