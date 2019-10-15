@@ -13,8 +13,6 @@ function pen(parent,onDrawEnd,options){
                     path.closed = true;
                     parent.onMouseMove()
                     console.log("pen is closed")
-                    // path.fullySelected = false;
-                    // path.selected = false;
                     parent.onMouseDown = null;
                     parent.onMouseMove = null;
                     path.selected = false;
@@ -109,6 +107,30 @@ function pen(parent,onDrawEnd,options){
             }
         }
     }
+    function clearAllEvent() {
+        parent.onMouseDown = null;
+        parent.onTouchStart = null;
+        parent.onMouseDrag = null;
+        parent.onTouchMove = null;
+        parent.onMouseMove = null;
+        parent.onMouseUp = null;
+    }
+    function clear() {
+        clearAllEvent();
+        for(let j=0;j<project.layers.length;j++){
+            let layer = project.layers[j];
+            for(let i=layer.children.length-1;i>0;i--){
+                let item = layer.children[i]
+                if(item instanceof Path) {
+                    let item = layer.children[i];
+                    if(!item.closed)
+                    {
+                        item.remove();
+                    }
+                }
+            }
+        }
+    }
     function initPath(option) {
         let path = new Path();
         path.name = option.name;
@@ -131,6 +153,7 @@ function pen(parent,onDrawEnd,options){
         return path;
     }
     return {
+        clear,
         draw,
         drawPath,
         drawRectangle

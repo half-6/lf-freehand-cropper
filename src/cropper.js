@@ -64,12 +64,13 @@ function cropper(canvasId,options) {
         me.options.fullMove = false;
     }
     function getPos(){
+        myPen.clear();
         if(raster.source==="data:,") return;
         let output = [];
         for(let i=0;i<project.layers[0].children.length;i++)
         {
             let item = project.layers[0].children[i]
-            if(item instanceof Path){
+            if(item instanceof Path && item.closed){
                 output.push(item.getPos());
             }
         }
@@ -151,6 +152,7 @@ function cropper(canvasId,options) {
     }
     function stopAction() {
         myMove.stop();
+        myPen.clear();
     }
     function draw(points,option) {
         let newPoints = [...points];
