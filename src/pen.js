@@ -133,6 +133,7 @@ function pen(parent,onDrawEnd,options){
     }
     function initPath(option) {
         let path = new Path();
+        path.option = option;
         path.name = option.name;
         path.closed = false;
         path.selected = option.selected || true;

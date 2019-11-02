@@ -3,6 +3,7 @@ function move(parent,canvasElement,options){
     let me = {options};
     let movingShift = new Point(0,0);
     let selectedElement = null;
+    let selectedFullMove = false;
     let hitOptions = {
         segments: true,
         stroke: true,
@@ -73,6 +74,7 @@ function move(parent,canvasElement,options){
                 let selectedPosition = project.activeLayer.position;
                 movingShift.x = selectedPosition.x - event.point.x;
                 movingShift.y = selectedPosition.y - event.point.y;
+                selectedFullMove = true;
             }
         }
         parent.onMouseDrag= function (event) {
@@ -92,15 +94,26 @@ function move(parent,canvasElement,options){
                     selectedPosition.x = event.point.x + movingShift.x;
                     selectedPosition.y = event.point.y + movingShift.y;
                 }
+                if(selectedElement instanceof Path || selectedElement instanceof Raster)
+                {
+                    document.body.style.cursor = 'move';
+                }
                 return;
             }
-            if(me.options.fullMove)
+            if(me.options.fullMove && selectedFullMove)
             {
+                document.body.style.cursor = 'move';
                 project.activeLayer.position.x = event.point.x + movingShift.x;
                 project.activeLayer.position.y = event.point.y + movingShift.y;
                 return;
             }
-
+        }
+        parent.onMouseUp = function(event){
+            document.body.style.cursor = 'default';
+            disSelected();
+            if(me.options.fullMove){
+                selectedFullMove = false;
+            }
         }
         canvasElement.removeEventListener('wheel', scroll)
         canvasElement.addEventListener('wheel', scroll);
