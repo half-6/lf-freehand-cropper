@@ -4,7 +4,7 @@
 <span class="badge-npmlicense"><a href="#license" title="License"><img src="https://img.shields.io/npm/l/@linkfuture/cropper.svg?style=flat-square" alt="License" /></a></span>  
 Freehand image cropper built with HTML5 canvas  
 ## Demo
-https://cyokin.github.io/lf-freehand-cropper/ 
+https://half-6.github.io/lf-freehand-cropper/ 
 ![Alt Text](demo/cropper.gif)
 ## Project setup
 ```
